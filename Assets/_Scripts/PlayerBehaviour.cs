@@ -7,8 +7,10 @@ public class PlayerBehaviour : MonoBehaviour
 
     public Joystick joystick;
     public float joystickHorizontalSensitivity;
+    public float joystickVerticalSensitivity;
     public float horizontalForce;
     public float verticalForce;
+    public bool isGrounded;
 
     private Rigidbody2D _rigidBody;
     private SpriteRenderer _spriteRenderer;
@@ -35,27 +37,50 @@ public class PlayerBehaviour : MonoBehaviour
 
     void _Move()
     {
-        if(joystick.Horizontal > joystickHorizontalSensitivity)
-        {
-            //right
-            _rigidBody.AddForce(Vector2.right * horizontalForce * Time.deltaTime);
-            _spriteRenderer.flipX = false;
-            _animator.SetInteger("AnimState", 1);
-        }
-        else if (joystick.Horizontal < -joystickHorizontalSensitivity)
-        {
-            //left
-            _rigidBody.AddForce(Vector2.left * horizontalForce * Time.deltaTime);
-            _spriteRenderer.flipX = true;
-            _animator.SetInteger("AnimState", 1);
 
-        }
-        else
+        if (isGrounded)
         {
-            //idle
-            _animator.SetInteger("AnimState", 0);
+            if (joystick.Horizontal > joystickHorizontalSensitivity)
+            {
+                //right
+                _rigidBody.AddForce(Vector2.right * horizontalForce * Time.deltaTime);
+                _spriteRenderer.flipX = false;
+                _animator.SetInteger("AnimState", 1);
+            }
+            else if (joystick.Horizontal < -joystickHorizontalSensitivity)
+            {
+                //left
+                _rigidBody.AddForce(Vector2.left * horizontalForce * Time.deltaTime);
+                _spriteRenderer.flipX = true;
+                _animator.SetInteger("AnimState", 1);
 
+            }
+            else if (joystick.Vertical > joystickVerticalSensitivity)
+            {
+                //jump
+                _rigidBody.AddForce(Vector2.up * verticalForce * Time.deltaTime);
+                _animator.SetInteger("AnimState", 2);
+
+            }
+            else
+            {
+                //idle
+                _animator.SetInteger("AnimState", 0);
+
+            }
         }
 
+       
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        isGrounded = true;
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        isGrounded = false;
     }
 }
