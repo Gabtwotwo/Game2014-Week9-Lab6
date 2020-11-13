@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - deathPlane
+  - Tilemap
+  - Walls
+  - Platforms
+  - Ramps
   layers:
   - Default
   - TransparentFX
@@ -14,9 +18,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Platforms
+  - Walls
+  - Ramps
   - 
   - 
   - 
